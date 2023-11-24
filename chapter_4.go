@@ -57,7 +57,7 @@ type Either[L, R any] struct {
 	right bool
 }
 
-func NewEither[L, R any](l L, r R, right bool) Either[L, R] {
+func EitherOf[L, R any](l L, r R, right bool) Either[L, R] {
 	return Either[L, R]{
 		l:     l,
 		r:     r,
@@ -71,8 +71,20 @@ func SafeDiv[T ~int](a, b T) Either[error, T] {
 	zero := Either[error, T]{}
 
 	if b != 0 {
-		return NewEither[error, T](zero.l, a/b, true)
+		return EitherOf[error, T](zero.l, a/b, true)
 	}
 
-	return NewEither[error, T](DivisionError, zero.r, false)
+	return EitherOf[error, T](DivisionError, zero.r, false)
+}
+
+type Opt[T any] struct {
+	ok bool
+	v  T
+}
+
+func OptOfOk[T any](t T) Opt[T] {
+	return Opt[T]{
+		ok: true,
+		v:  t,
+	}
 }

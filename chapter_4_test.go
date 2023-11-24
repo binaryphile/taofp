@@ -254,7 +254,7 @@ func TestNewEither(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := NewEither(tt.args.l, tt.args.r, tt.args.right); !reflect.DeepEqual(got, tt.want) {
+			if got := EitherOf(tt.args.l, tt.args.r, tt.args.right); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewEither() = %v, want %v", got, tt.want)
 			}
 		})
@@ -292,6 +292,41 @@ func TestSafeDiv(t *testing.T) {
 
 			if got := SafeDiv(tt.args.a, tt.args.b); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("SafeDiv() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestOptOfOk(t *testing.T) {
+	type args struct {
+		x int
+	}
+
+	tests := []struct {
+		name string
+		args args
+		want Opt[int]
+	}{
+		{
+			name: "basic",
+			args: args{
+				x: 2,
+			},
+			want: Opt[int]{
+				ok: true,
+				v:  2,
+			},
+		},
+	}
+
+	for _, test := range tests {
+		tt := test
+
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := OptOfOk(tt.args.x); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("OptOfOk() = %v, want %v", got, tt.want)
 			}
 		})
 	}
