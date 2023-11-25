@@ -85,10 +85,10 @@ type Opt[T any] struct {
 	v  T
 }
 
-func OptOfOk[T any](t T) Opt[T] {
+func OptOfOk[T any](v T) Opt[T] {
 	return Opt[T]{
 		ok: true,
-		v:  t,
+		v:  v,
 	}
 }
 
