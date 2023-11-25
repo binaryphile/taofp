@@ -21,3 +21,47 @@ func LongestString(l []string) Opt[string] {
 
 	return OptOfOk(longer(l[0], tailLongest.v))
 }
+
+func Concat(l []string, delimiter string) string {
+	if len(l) == 0 {
+		return ""
+	}
+
+	concatTail := Concat(l[1:], delimiter)
+
+	if concatTail == "" {
+		return l[0]
+	}
+
+	return l[0] + delimiter + Concat(l[1:], delimiter)
+}
+
+func Height[T any](n *Node[T]) int {
+	if n == nil {
+		return 0
+	}
+
+	return 1 + max(Height(n.l), Height(n.r))
+}
+
+type Nat struct {
+	*Nat
+}
+
+func Pred(n *Nat) Opt[*Nat] {
+	if n == nil {
+		return Opt[*Nat]{}
+	}
+
+	return OptOfOk(n.Nat)
+}
+
+func Add(m, n *Nat) *Nat {
+	if m == nil {
+		return n
+	}
+
+	return &Nat{
+		Nat: Add(m.Nat, n),
+	}
+}
