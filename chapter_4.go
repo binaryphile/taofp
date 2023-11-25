@@ -1,6 +1,9 @@
 package taofp
 
-import "errors"
+import (
+	"cmp"
+	"errors"
+)
 
 func EnumerateIntegers(a, b int) []int {
 	enumerateRest := func() []int {
@@ -52,16 +55,16 @@ func SumTree[T ~int](node *Node[T]) T {
 }
 
 type Either[L, R any] struct {
-	l     L
-	r     R
-	right bool
+	l       L
+	r       R
+	isRight bool
 }
 
-func EitherOf[L, R any](l L, r R, right bool) Either[L, R] {
+func EitherOf[L, R any](l L, r R, isRight bool) Either[L, R] {
 	return Either[L, R]{
-		l:     l,
-		r:     r,
-		right: right,
+		l:       l,
+		r:       r,
+		isRight: isRight,
 	}
 }
 
@@ -87,4 +90,18 @@ func OptOfOk[T any](t T) Opt[T] {
 		ok: true,
 		v:  t,
 	}
+}
+
+func ListMax[L ~[]T, T cmp.Ordered](l L) Opt[T] {
+	if len(l) == 0 {
+		return Opt[T]{}
+	}
+
+	tailMax := ListMax[L](l[1:])
+
+	if !tailMax.ok {
+		return OptOfOk(l[0])
+	}
+
+	return OptOfOk(max(l[0], tailMax.v))
 }

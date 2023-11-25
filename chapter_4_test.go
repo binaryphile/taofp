@@ -6,6 +6,8 @@ import (
 )
 
 func TestEnumerateIntegers(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		a, b int
 	}
@@ -39,6 +41,8 @@ func TestEnumerateIntegers(t *testing.T) {
 }
 
 func TestHd(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		l []int
 	}
@@ -71,6 +75,8 @@ func TestHd(t *testing.T) {
 }
 
 func TestTl(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		l []int
 	}
@@ -103,6 +109,8 @@ func TestTl(t *testing.T) {
 }
 
 func TestNth(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		l []int
 		n int
@@ -139,6 +147,8 @@ func TestNth(t *testing.T) {
 type IntNode = Node[int]
 
 func TestSize(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		node *IntNode
 	}
@@ -182,6 +192,8 @@ func TestSize(t *testing.T) {
 }
 
 func TestSumTree(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		node *IntNode
 	}
@@ -225,6 +237,8 @@ func TestSumTree(t *testing.T) {
 }
 
 func TestNewEither(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		l, r  int
 		right bool
@@ -242,8 +256,8 @@ func TestNewEither(t *testing.T) {
 				right: true,
 			},
 			want: Either[int, int]{
-				r:     2,
-				right: true,
+				r:       2,
+				isRight: true,
 			},
 		},
 	}
@@ -262,6 +276,8 @@ func TestNewEither(t *testing.T) {
 }
 
 func TestSafeDiv(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		a, b int
 	}
@@ -278,8 +294,8 @@ func TestSafeDiv(t *testing.T) {
 				b: 2,
 			},
 			want: Either[error, int]{
-				r:     1,
-				right: true,
+				r:       1,
+				isRight: true,
 			},
 		},
 	}
@@ -298,6 +314,8 @@ func TestSafeDiv(t *testing.T) {
 }
 
 func TestOptOfOk(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		x int
 	}
@@ -327,6 +345,50 @@ func TestOptOfOk(t *testing.T) {
 
 			if got := OptOfOk(tt.args.x); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("OptOfOk() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestListMax(t *testing.T) {
+	t.Parallel()
+
+	type args struct {
+		l []int
+	}
+
+	tests := []struct {
+		name string
+		args args
+		want Opt[int]
+	}{
+		{
+			name: "ok",
+			args: args{
+				l: []int{1, 2, 3},
+			},
+			want: Opt[int]{
+				ok: true,
+				v:  3,
+			},
+		},
+		{
+			name: "not ok",
+			args: args{
+				[]int{},
+			},
+			want: Opt[int]{},
+		},
+	}
+
+	for _, test := range tests {
+		tt := test
+
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := ListMax(tt.args.l); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ListMax() = %v, want %v", got, tt.want)
 			}
 		})
 	}
