@@ -68,6 +68,19 @@ func EitherOf[L, R any](l L, r R, isRight bool) Either[L, R] {
 	}
 }
 
+func LeftOf[L, R any](l L) Either[L, R] {
+	return Either[L, R]{
+		l: l,
+	}
+}
+
+func RightOf[L, R any](r R) Either[L, R] {
+	return Either[L, R]{
+		r:       r,
+		isRight: true,
+	}
+}
+
 var DivisionError = errors.New("division by zero")
 
 func SafeDiv[T ~int](a, b T) Either[error, T] {

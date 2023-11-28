@@ -236,12 +236,12 @@ func TestSumTree(t *testing.T) {
 	}
 }
 
-func TestNewEither(t *testing.T) {
+func TestEitherOf(t *testing.T) {
 	t.Parallel()
 
 	type args struct {
-		l, r  int
-		right bool
+		l, r    int
+		isRight bool
 	}
 
 	tests := []struct {
@@ -252,8 +252,8 @@ func TestNewEither(t *testing.T) {
 		{
 			name: "basic",
 			args: args{
-				r:     2,
-				right: true,
+				r:       2,
+				isRight: true,
 			},
 			want: Either[int, int]{
 				r:       2,
@@ -268,8 +268,81 @@ func TestNewEither(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := EitherOf(tt.args.l, tt.args.r, tt.args.right); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewEither() = %v, want %v", got, tt.want)
+			if got := EitherOf(tt.args.l, tt.args.r, tt.args.isRight); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("EitherOf() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestLeftOf(t *testing.T) {
+	t.Parallel()
+
+	type args struct {
+		l int
+	}
+
+	tests := []struct {
+		name string
+		args args
+		want Either[int, int]
+	}{
+		{
+			name: "basic",
+			args: args{
+				l: 2,
+			},
+			want: Either[int, int]{
+				l: 2,
+			},
+		},
+	}
+
+	for _, test := range tests {
+		tt := test
+
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := LeftOf[int, int](tt.args.l); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("LeftOf() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestRightOf(t *testing.T) {
+	t.Parallel()
+
+	type args struct {
+		r int
+	}
+
+	tests := []struct {
+		name string
+		args args
+		want Either[int, int]
+	}{
+		{
+			name: "basic",
+			args: args{
+				r: 2,
+			},
+			want: Either[int, int]{
+				r:       2,
+				isRight: true,
+			},
+		},
+	}
+
+	for _, test := range tests {
+		tt := test
+
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := RightOf[int, int](tt.args.r); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("RightOf() = %v, want %v", got, tt.want)
 			}
 		})
 	}
